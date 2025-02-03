@@ -4,12 +4,13 @@
 #include "hw_can.h"
 #include "car.h"
 
-#define USE_LR2_2007MY
-#define USE_LR2_2013MY
-#define USE_XC90_2007MY
-#define USE_SKODA_FABIA
-#define USE_Q3_2015
-#define USE_TOYOTA_PREMIO_26X
+// #define USE_LR2_2007MY
+// #define USE_LR2_2013MY
+// #define USE_XC90_2007MY
+// #define USE_SKODA_FABIA
+// #define USE_Q3_2015
+// #define USE_TOYOTA_PREMIO_26X
+#define USE_SUBARU_SJ
 
 static float scale(float value, float in_min, float in_max, float out_min, float out_max)
 {
@@ -185,28 +186,32 @@ uint8_t is_timeout(struct msg_desc_t * desc)
 
 #include "cars/anymsg.c"
 
-#ifdef USE_LR2_2007MY
-#include "cars/lr2_2007my.c"
-#endif
+// #ifdef USE_LR2_2007MY
+// #include "cars/lr2_2007my.c"
+// #endif
 
-#ifdef USE_LR2_2013MY
-#include "cars/lr2_2013my.c"
-#endif
+// #ifdef USE_LR2_2013MY
+// #include "cars/lr2_2013my.c"
+// #endif
 
-#ifdef USE_XC90_2007MY
-#include "cars/xc90_2007my.c"
-#endif
+// #ifdef USE_XC90_2007MY
+// #include "cars/xc90_2007my.c"
+// #endif
 
-#ifdef USE_SKODA_FABIA
-#include "cars/skoda_fabia.c"
-#endif
+// #ifdef USE_SKODA_FABIA
+// #include "cars/skoda_fabia.c"
+// #endif
 
-#ifdef USE_Q3_2015
-#include "cars/q3_2015.c"
-#endif
+// #ifdef USE_Q3_2015
+// #include "cars/q3_2015.c"
+// #endif 
 
-#ifdef USE_TOYOTA_PREMIO_26X
-#include "cars/toyota_premio_26x.c"
+// #ifdef USE_TOYOTA_PREMIO_26X
+// #include "cars/toyota_premio_26x.c"
+// #endif
+
+#ifdef USE_SUBARU_SJ
+#include "cars/SUBARU_SJ.c"
 #endif
 
 enum e_car_t car_get_next_car(void)
@@ -297,11 +302,11 @@ void car_init(enum e_car_t car, struct key_cb_t * cb)
 
 	key_state.key_cb = cb;
 
-	e_speed_t speed = e_speed_125;
-	if ((car == e_car_skoda_fabia) || (car == e_car_q3_2015))
-		speed = e_speed_100;
-	else if (car == e_car_toyota_premio_26x)
-		speed = e_speed_500;
+	e_speed_t speed = e_speed_500;
+//	if ((car == e_car_skoda_fabia) || (car == e_car_q3_2015))
+//		speed = e_speed_100;
+//	else if (car == e_car_SUBARU_SJ)
+//		speed = e_speed_500;
 	hw_can_set_speed(hw_can_get_mscan(), speed);
 }
 
@@ -319,7 +324,7 @@ void car_process(uint8_t ticks)
 		case e_car_anymsg:
 			in_process(can, ticks, anymsg_desc, sizeof(anymsg_desc)/sizeof(anymsg_desc[0]));
 			break;
-		case e_car_lr2_2007my:
+/*		case e_car_lr2_2007my:
 #ifdef USE_LR2_2007MY
 			in_process(can, ticks, lr2_2007my_ms, sizeof(lr2_2007my_ms)/sizeof(lr2_2007my_ms[0]));
 #endif
@@ -342,11 +347,15 @@ void car_process(uint8_t ticks)
 		case e_car_q3_2015:
 #ifdef USE_Q3_2015
 			in_process(can, ticks, q3_2015_ms, sizeof(q3_2015_ms)/sizeof(q3_2015_ms[0]));
-			break;
-#endif
-		case e_car_toyota_premio_26x:
-#ifdef USE_TOYOTA_PREMIO_26X
+			break; 
+   		case e_car_toyota_premio_26x:
+#ifdef USE_toyota_premio_26x
 			in_process(can, ticks, toyota_premio_26x_ms, sizeof(toyota_premio_26x_ms)/sizeof(toyota_premio_26x_ms[0]));
+			break;*/
+#endif
+		case e_car_SUBARU_SJ:
+#ifdef USE_SUBARU_SJ
+			in_process(can, ticks, SUBARU_SJ_ms, sizeof(SUBARU_SJ_ms)/sizeof(SUBARU_SJ_ms[0]));
 #endif
 			break;
 		default:
